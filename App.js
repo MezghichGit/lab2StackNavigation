@@ -91,6 +91,14 @@ function HomeScreen() {
   );
 }
 
+function UsersScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Users!</Text>
+    </View>
+  );
+}
+
 function SettingsScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -99,19 +107,26 @@ function SettingsScreen() {
   );
 }
 
+function ContactScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Contact us!</Text>
+    </View>
+  );
+}
+
 const Tab = createBottomTabNavigator();  //Création du Tab Navigator
 
 const MyTabs = () =>{
   return (
-    <Tab.Navigator         
-    
+    <Tab.Navigator
     screenOptions={({ route }) => ({
       tabBarIcon: () => {
         let iconName;
         if (route.name == "Home") { iconName = "home-outline"; }
         else if (route.name == "Settings") { iconName = "settings-outline"; }
-    
-
+        else if(route.name == "Users") { iconName = "people-circle"; }
+        else  { iconName = "mail"; }
         return (
           <Ionicons
             name={iconName}
@@ -123,7 +138,9 @@ const MyTabs = () =>{
     })}
 >
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Users" component={UsersScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name="Contact" component={ContactScreen} />
     </Tab.Navigator>
   );
 }
