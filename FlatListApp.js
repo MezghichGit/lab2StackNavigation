@@ -1,6 +1,6 @@
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar,TouchableOpacity } from 'react-native';
-import React, { useState } from "react";
-const DATA = [
+import React, { useState,useEffect } from "react";
+/*const DATA = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
     title: 'First Item',
@@ -13,7 +13,7 @@ const DATA = [
     id: '58694a0f-3da1-471f-bd96-145571e29d72',
     title: 'Third Item',
   }
-];
+];*/
 
 // 1)le composant modèle qu'on va afficher dans la FlatList
 /*const Item = ({ title, id }) => (
@@ -25,14 +25,43 @@ const DATA = [
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-      <Text style={[styles.title, textColor]}>{item.title}</Text>
+      <Text style={[styles.title, textColor]}>{item.id}</Text>
+      <Text style={[styles.title, textColor]}>{item.name}</Text>
+      <Text style={[styles.title, textColor]}>{item.username}</Text>
+      <Text style={[styles.title, textColor]}>{item.email}</Text>
+      <Text style={[styles.title, textColor]}>{item.address.street}</Text>
     </TouchableOpacity>
   );
-
 const FlatListApp = () => {
 
   const [selectedId, setSelectedId] = useState(null);
+  const[users,setUsers]=useState([]);
+  // users variable locale à la méthode
+  
+  
+  //const DATA = users;
+  useEffect(() => { getData();},[]);
 
+/*
+  const getData=()=>{
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(response=>response.json())
+    .then(data=>{
+      setUsers(data);
+      console.log(data);
+    })
+  }*/
+  const getData = async()=>{
+    const response = await fetch('https://jsonplaceholder.typicode.com/users')
+    const data = await response.json()
+    setUsers(data)
+    console.log(data)
+  }
+
+
+
+
+  // let users = [];
   /*const renderItem = ({ item }) => (
     <Item title={item.title} id={item.id}/>
   );*/
@@ -57,7 +86,7 @@ const FlatListApp = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={DATA}
+        data={users}
         renderItem={renderItem}
       />
     </SafeAreaView>
