@@ -6,83 +6,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 //import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React, { useState, useEffect } from "react";
-// Partie 1 :  Modèle de navigation en Stack
-/*
-// premier composant : Le systeme de navigation en Stack
-const Stack = createNativeStackNavigator();
-// deuxième composant : screen Home
-const HomeScreen = ({ navigation }) => {
-  return (
-    <View>
-    <Button
-      title="Go to Jane's profile"
-      onPress={() =>
-        navigation.navigate('Profile', { name: 'Jane', age:30 })
-      }
-    />
-    <Button style={styles.btnMarge}
-      title="Logout"
-      onPress={() =>
-        navigation.navigate('Authentification')
-      }
-    />
-    </View>
-  );
-};
-
-// troisième composant : screen profil
-const ProfileScreen = ({ navigation, route }) => {
-  return (
-    <View>
-      
-      <Text>This is {route.params.name}'s profile</Text>
-      
-      <Text>{route.params.name} age :  {route.params.age}</Text>
-      
-      <Button title="Go back" onPress={() => navigation.goBack()} />
-      </View>
-      )};
-
-
-  const AuthentificationScreen = ({ navigation }) => {
-        return (
-          <Button
-            title="Authentification"
-            onPress={() =>
-              navigation.navigate('Home')
-            }
-          />
-        );
-      };
-
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='Authentification' screenOptions={{headerShown: true}}>
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
-        <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'My Profile' }} />
-        <Stack.Screen name="Authentification" component={AuthentificationScreen} options={{ title: 'Connexion' }} />
-      </Stack.Navigator>
-    </NavigationContainer>
-
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  btnMarge: {
-    margin:10 ,
-  },
-});
-*/
-
 
 /***** Composant Flat ListItem */
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
@@ -104,14 +27,7 @@ function HomeScreen() {
     </View>
   );
 }
-/*
-function UsersScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Users!</Text>
-    </View>
-  );
-}*/
+
 
 function SettingsScreen() {
   return (
@@ -131,18 +47,8 @@ function ContactScreen() {
 
 /*****Partie Stack  ********/
 const Stack = createNativeStackNavigator();
-/*function ListUsers() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>ListUsers!</Text>
-    </View>
-  );
-}*/
 
 const ListUsers =({navigation})=>{
- // récupérer les data et les afficher dans un FlatList
-  // const [users, setUsers] = useState([]);
-  // const [fetchedState, setFetchedState] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [users, setUsers] = useState([]);
   const [fetchedState, setFetchedState] = useState(null);
@@ -170,7 +76,8 @@ const renderItem = ({ item }) => {
           item={item}
           onPress={() => {
               setSelectedId(item.id)
-              console.log(item.id)
+              //console.log(item.id)
+              navigation.navigate('DetailsUser', { userId: item.id })
           }
           }
           backgroundColor={{ backgroundColor }}
@@ -184,7 +91,6 @@ return (
     <Text style={styles.titreText}>Liste des Users</Text>
       {
       fetchedState ?  <ActivityIndicator size="large" color="#0000ff" /> :
- 
       <FlatList
           data={users}
           renderItem={renderItem}
@@ -192,14 +98,6 @@ return (
       }
   </SafeAreaView>
 );
-  /*return (
-
-   <SafeAreaView style={styles.container}>
-     <Text style={styles.titreText}>Liste des Users</Text>
-     <Button onPress={()=>navigation.navigate('AddUser')} title="Vers Add" />
-   </SafeAreaView>
- 
- );*/
 
 }
 
@@ -211,11 +109,52 @@ function AddUser() {
     </View>
   );
 }
+
+const DetailsUser = ({navigation, route})=>{
+
+  //const [user, setUser] = useState();
+  const [fetchedState, setFetchedState] = useState(null);
+  let userData;
+  console.log("User : "+route.params.userId);
+
+
+  const getUserData = async (id) => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users/'+id)
+    const data = await response.json();
+    userData = data;
+    console.log(userData);
+    //setUser({data});
+    //console.log(user);
+    setFetchedState(null);
+  }
+
+  useEffect(
+    () => {
+      setFetchedState('Loading') ;
+      setTimeout(()=>getUserData(route.params.userId),2000);
+     }, []
+  );
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Les détails du User</Text>
+      fetchedState ?  <ActivityIndicator size="large" color="#0000ff" /> :
+      <Text style={[styles.title]}>{userData.id}</Text>
+      <Text style={[styles.title]}>{userData.name}</Text>
+      <Text style={[styles.title]}>{userData.username}</Text>
+      <Text style={[styles.title]}>{userData.email}</Text>
+      <Text style={[styles.title]}>{userData.address.street}</Text>
+
+      <Button title="Go back" onPress={() => navigation.goBack()} />
+    </View>
+  );
+
+}
 function StackUser() {
   return (
             <Stack.Navigator initialRouteName='ListUsers' screenOptions={{headerShown: false}}>
             <Stack.Screen name="ListUsers" component={ListUsers}></Stack.Screen>
             <Stack.Screen name="AddUser" component={AddUser}></Stack.Screen>
+            <Stack.Screen name="DetailsUser" component={DetailsUser}></Stack.Screen>
             </Stack.Navigator>
   );
 }
