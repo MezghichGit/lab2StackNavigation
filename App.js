@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button,SafeAreaView, FlatList,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button,SafeAreaView, FlatList,TouchableOpacity,ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -145,12 +145,19 @@ const ListUsers =({navigation})=>{
   // const [fetchedState, setFetchedState] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [users, setUsers] = useState([]);
+  const [fetchedState, setFetchedState] = useState(null);
 
-  useEffect(() => { getData(); }, []);
+  useEffect(
+    () => {
+      setFetchedState('Loading') ;
+      setTimeout(()=>getData(),1000);
+     }, []
+  );
   const getData = async () => {
     const response = await fetch('https://jsonplaceholder.typicode.com/users')
     const data = await response.json()
     setUsers(data)
+    setFetchedState(null);
     //console.log(data)
 }
 /////
@@ -174,10 +181,15 @@ const renderItem = ({ item }) => {
 
 return (
   <SafeAreaView style={styles.container}>
+    <Text style={styles.titreText}>Liste des Users</Text>
+      {
+      fetchedState ?  <ActivityIndicator size="large" color="#0000ff" /> :
+ 
       <FlatList
           data={users}
           renderItem={renderItem}
       />
+      }
   </SafeAreaView>
 );
   /*return (
@@ -249,6 +261,10 @@ export default function App() {
 
 const styles =  StyleSheet.create({
   container: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+},
+  container2: {
     padding: 10,
     alignItems:'center',
     justifyContent:'center',
