@@ -112,8 +112,8 @@ function AddUser() {
 
 const DetailsUser = ({ navigation, route }) => {
   const userId = route.params.userId;
-  const [allUserData, setAllUserData] = useState([]);
-  const [fetchedState, setFetchedState] = useState(null);
+  let [allUserData, setAllUserData] = useState({});
+  let [fetchedState, setFetchedState] = useState(null);
 
   useEffect(() => {
     setFetchedState('loading')
@@ -125,13 +125,15 @@ const DetailsUser = ({ navigation, route }) => {
       const response=await  fetch('https://jsonplaceholder.typicode.com/users/' + userId);
       const data=await response.json();
       setAllUserData(data)
-      //console.log(data)
+      console.log(data);
+     
     }
     catch(error){
       console.log("Vérifier votre api...");
     }
     finally{
       setFetchedState(null);
+      
     }
   }
 
@@ -147,16 +149,14 @@ const DetailsUser = ({ navigation, route }) => {
       <Text style={styles.titreText}>Phone : {allUserData.phone}</Text>
       <Text style={styles.titreText}>Email : {allUserData.email}</Text>
       <Text style={styles.titreText}>Website : {allUserData.website}</Text>
+      <Text style={styles.titreText}>Adress, Street : {allUserData.address && allUserData.address.street}</Text>
+      <Text style={styles.titreText}>Zip Code : {allUserData.address && allUserData.address.zipcode}</Text>
       </View>
       }
       <Button title="Go back" onPress={() => navigation.goBack()} />
     </SafeAreaView>
   
   );
-
-  //
-
-
 }
 function StackUser() {
   return (
