@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 //import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 // Partie 1 :  Modèle de navigation en Stack
 /*
 // premier composant : Le systeme de navigation en Stack
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
 function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
+      <Text>Ecran d'accuiel!</Text>
     </View>
   );
 }
