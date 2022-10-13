@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button,SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -90,14 +90,14 @@ function HomeScreen() {
     </View>
   );
 }
-
+/*
 function UsersScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Users!</Text>
     </View>
   );
-}
+}*/
 
 function SettingsScreen() {
   return (
@@ -115,6 +115,50 @@ function ContactScreen() {
   );
 }
 
+/*****Partie Stack  ********/
+const Stack = createNativeStackNavigator();
+/*function ListUsers() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>ListUsers!</Text>
+    </View>
+  );
+}*/
+
+const ListUsers =({navigation})=>{
+
+  // const [users, setUsers] = useState([]);
+  // const [fetchedState, setFetchedState] = useState(null);
+
+  return (
+
+   <SafeAreaView style={styles.container}>
+     <Text style={styles.titreText}>Liste des Users</Text>
+     <Button onPress={()=>navigation.navigate('AddUser')} title="Vers Add" />
+   </SafeAreaView>
+ 
+ );
+
+}
+
+
+function AddUser() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>AddUser</Text>
+    </View>
+  );
+}
+function StackUser() {
+  return (
+            <Stack.Navigator initialRouteName='ListUsers' screenOptions={{headerShown: true}}>
+            <Stack.Screen name="ListUsers" component={ListUsers}></Stack.Screen>
+            <Stack.Screen name="AddUser" component={AddUser}></Stack.Screen>
+            </Stack.Navigator>
+  );
+}
+
+/******* fin partie Stack *****/
 const Tab = createBottomTabNavigator();  //Création du Tab Navigator
 
 const MyTabs = () =>{
@@ -138,7 +182,7 @@ const MyTabs = () =>{
     })}
 >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Users" component={UsersScreen} />
+      <Tab.Screen name="Users" component={StackUser} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
       <Tab.Screen name="Contact" component={ContactScreen} />
     </Tab.Navigator>
@@ -152,3 +196,16 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles =  StyleSheet.create({
+  container: {
+    padding: 10,
+    alignItems:'center',
+    justifyContent:'center',
+    backgroundColor: '#43a1c9',
+  },
+  titreText: {
+    fontSize: 20,
+    textAlign: 'center'
+  }
+});
