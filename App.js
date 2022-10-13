@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button,SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Button,SafeAreaView, FlatList,TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 //import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import React, { useState, useEffect } from "react";
 // Partie 1 :  Modèle de navigation en Stack
 /*
 // premier composant : Le systeme de navigation en Stack
@@ -83,6 +83,19 @@ const styles = StyleSheet.create({
 });
 */
 
+
+/***** Composant Flat ListItem */
+const Item = ({ item, onPress, backgroundColor, textColor }) => (
+  <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
+      <Text style={[styles.title, textColor]}>{item.id}</Text>
+      <Text style={[styles.title, textColor]}>{item.name}</Text>
+      <Text style={[styles.title, textColor]}>{item.username}</Text>
+      <Text style={[styles.title, textColor]}>{item.email}</Text>
+      <Text style={[styles.title, textColor]}>{item.address.street}</Text>
+  </TouchableOpacity>
+);
+/******* Fin du FlatList */
+
 // Partie 2 :  Modèle de navigation en Tab
 function HomeScreen() {
   return (
@@ -127,18 +140,54 @@ const Stack = createNativeStackNavigator();
 }*/
 
 const ListUsers =({navigation})=>{
-
+ // récupérer les data et les afficher dans un FlatList
   // const [users, setUsers] = useState([]);
   // const [fetchedState, setFetchedState] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => { getData(); }, []);
+  const getData = async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users')
+    const data = await response.json()
+    setUsers(data)
+    //console.log(data)
+}
+/////
+const renderItem = ({ item }) => {
+  const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
+  const color = item.id === selectedId ? 'white' : 'black';
 
   return (
+      <Item
+          item={item}
+          onPress={() => {
+              setSelectedId(item.id)
+              console.log(item.id)
+          }
+          }
+          backgroundColor={{ backgroundColor }}
+          textColor={{ color }}
+      />
+  );
+};
+
+return (
+  <SafeAreaView style={styles.container}>
+      <FlatList
+          data={users}
+          renderItem={renderItem}
+      />
+  </SafeAreaView>
+);
+  /*return (
 
    <SafeAreaView style={styles.container}>
      <Text style={styles.titreText}>Liste des Users</Text>
      <Button onPress={()=>navigation.navigate('AddUser')} title="Vers Add" />
    </SafeAreaView>
  
- );
+ );*/
 
 }
 
@@ -152,7 +201,7 @@ function AddUser() {
 }
 function StackUser() {
   return (
-            <Stack.Navigator initialRouteName='ListUsers' screenOptions={{headerShown: true}}>
+            <Stack.Navigator initialRouteName='ListUsers' screenOptions={{headerShown: false}}>
             <Stack.Screen name="ListUsers" component={ListUsers}></Stack.Screen>
             <Stack.Screen name="AddUser" component={AddUser}></Stack.Screen>
             </Stack.Navigator>
@@ -208,5 +257,15 @@ const styles =  StyleSheet.create({
   titreText: {
     fontSize: 20,
     textAlign: 'center'
-  }
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 4,
+    marginHorizontal: 16,
+    borderRadius: 20
+},
+title: {
+    fontSize: 24,
+}
 });
