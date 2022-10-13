@@ -31,15 +31,25 @@ const ProfileScreen = ({ navigation, route }) => {
       )};
 
 
-
+  const AuthentificationScreen = ({ navigation }) => {
+        return (
+          <Button
+            title="Authentification"
+            onPress={() =>
+              navigation.navigate('Home')
+            }
+          />
+        );
+      };
 
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName='Authentification' screenOptions={{headerShown: false}}>
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
         <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'My Profile' }} />
+        <Stack.Screen name="Authentification" component={AuthentificationScreen} options={{ title: 'Connexion' }} />
       </Stack.Navigator>
     </NavigationContainer>
 
