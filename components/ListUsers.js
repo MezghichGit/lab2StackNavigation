@@ -6,11 +6,15 @@ import { Image, TextInput, PermissionsAndroid, StyleSheet, Text, View, Button, S
 /***** Composant Flat ListItem */
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-        <Text style={[styles.title, textColor]}>{item.id}</Text>
+       {/* <Text style={[styles.title, textColor]}>{item.id}</Text>
         <Text style={[styles.title, textColor]}>{item.name}</Text>
         <Text style={[styles.title, textColor]}>{item.username}</Text>
         <Text style={[styles.title, textColor]}>{item.email}</Text>
-        <Text style={[styles.title, textColor]}>{item.address.street}</Text>
+        <Text style={[styles.title, textColor]}>{item.address.street}</Text>*/}
+        <Text style={[styles.title, textColor]}>{item.id}</Text>
+        <Text style={[styles.title, textColor]}>{item.nom}</Text>
+        <Text style={[styles.title, textColor]}>{item.prenom}</Text>
+        <Text style={[styles.title, textColor]}>{item.email}</Text>
     </TouchableOpacity>
 );
 /******* Fin du FlatList */
@@ -28,7 +32,8 @@ const ListUsers = ({ navigation }) => {
         }, []
     );
     const getData = async () => {
-        const response = await fetch('https://jsonplaceholder.typicode.com/users')
+        //const response = await fetch('https://jsonplaceholder.typicode.com/users')
+        const response = await fetch('http://127.0.0.1:8000/api/pharma/users')
         const data = await response.json()
         setUsers(data)
         setFetchedState(null);
@@ -56,6 +61,7 @@ const ListUsers = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Button title="AddUser" onPress={()=>navigation.navigate('AddUser')}></Button>
             <Text style={styles.titreText}>Liste des Users</Text>
             {
                 fetchedState ? <ActivityIndicator size="large" color="#0000ff" /> :
