@@ -21,6 +21,8 @@ const SuccessRegistration = ({ navigation }) => {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Félicitations compté créer avec succès!</Text>
             <Button title="Go back" onPress={() => navigation.goBack()} />
+
+            <Button title="Clear Storage" onPress={() => AsyncStorage.removeItem('user')} />
         </View>
     );
 }
