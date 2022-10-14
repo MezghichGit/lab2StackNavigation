@@ -59,6 +59,15 @@ const ContactScreen = ({navigation})=> {
   const [choixRean, setChoixRean] = useState("");
 
 
+  const clearForm = ()=>{
+    onChangeName("");
+    onChangeEmail("");
+
+     //setChoixRean("");
+      //setChoixReact("");
+      setCheckedReact(false);
+      setCheckedReactNative(false);
+  }
   return (
 
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -142,10 +151,7 @@ const ContactScreen = ({navigation})=> {
    <Button title="Créer compte" onPress={
     ()=>{
       console.log(name+" "+email+" "+password+" "+value+" "+choixRean+" "+choixReact);
-      //setChoixRean("");
-      //setChoixReact("");
-      setCheckedReact(false);
-      setCheckedReactNative(false);
+      clearForm();
       navigation.navigate('SuccessRegistration');
     }}></Button>
     </View>
@@ -347,6 +353,15 @@ function StackUser() {
   );
 }
 
+function StackContact() {
+    return (
+      <Stack.Navigator initialRouteName='ContactRoute' screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="ContactRoute" component={ContactScreen}></Stack.Screen>
+        <Stack.Screen name="SuccessRegistration" component={SuccessRegistration}></Stack.Screen>
+      </Stack.Navigator>
+    );
+  }
+
 /******* fin partie Stack *****/
 const Tab = createBottomTabNavigator();  //Création du Tab Navigator
 
@@ -375,7 +390,7 @@ const MyTabs = () => {
       <Tab.Screen name="Users" component={StackUser} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
       <Tab.Screen name="Location" component={LocationScreen} />
-      <Tab.Screen name="Contact" component={ContactScreen} />
+      <Tab.Screen name="Contact" component={StackContact} />
     </Tab.Navigator>
   );
 }
