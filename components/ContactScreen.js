@@ -1,7 +1,8 @@
-import { Image, TextInput, PermissionsAndroid, StyleSheet, Text, View, Button, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {Image, TextInput, PermissionsAndroid, StyleSheet, Text, View, Button, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import React, { useState} from "react";
 import { Checkbox, RadioButton } from "react-native-paper";
 import styles from '../style';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const ContactScreen = ({ navigation }) => {
     const [name, onChangeName] = useState("");
     const [email, onChangeEmail] = useState("");
@@ -12,6 +13,16 @@ const ContactScreen = ({ navigation }) => {
     // const [isSelected, setSelection] = useState(false);
     const [choixReact, setChoixReact] = useState("");
     const [choixRean, setChoixRean] = useState("");
+
+    let obj = {
+        name: name,
+        email: email,
+        password: password,
+      }
+
+      const saveData=()=>{
+        AsyncStorage.setItem('user',JSON.stringify(obj));
+    }
 
 
     const clearForm = () => {
@@ -107,6 +118,7 @@ const ContactScreen = ({ navigation }) => {
                     console.log(name + " " + email + " " + password + " " + value + " " + choixRean + " " + choixReact);
                     clearForm();
                     navigation.navigate('SuccessRegistration');
+                    saveData();
                 }}></Button>
         </View>
     );
