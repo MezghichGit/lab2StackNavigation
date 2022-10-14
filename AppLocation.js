@@ -37,7 +37,7 @@ export default function App() {
         }}
         showsUserLocation={true}
         onUserLocationChange={(e) => { 
-          console.log("Position changed", e.nativeEvent.coordinate)
+        //console.log("Position changed", e.nativeEvent.coordinate)
           setPin({ 
             latitude: e.nativeEvent.coordinate.latitude,
             longitude: e.nativeEvent.coordinate.longitude
