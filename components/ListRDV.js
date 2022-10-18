@@ -6,23 +6,19 @@ import { Image, TextInput, PermissionsAndroid, StyleSheet, Text, View, Button, S
 /***** Composant Flat ListItem */
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-        <Text style={[styles.title, textColor]}>{item.id}</Text>
-        <Text style={[styles.title, textColor]}>{item.name}</Text>
-        <Text style={[styles.title, textColor]}>{item.username}</Text>
-        <Text style={[styles.title, textColor]}>{item.email}</Text>
-        <Text style={[styles.title, textColor]}>{item.address.street}</Text>
-        {/*<Text style={[styles.title, textColor]}>{item.id}</Text>
-        <Text style={[styles.title, textColor]}>{item.nom}</Text>
-        <Text style={[styles.title, textColor]}>{item.prenom}</Text>
-        <Text style={[styles.title, textColor]}>{item.email}</Text>*/}
+        <Text style={[styles.title, textColor]}>Identifaint RDV : {item.id}</Text>
+        <Text style={[styles.title, textColor]}>Libelle : {item.libele}</Text>
+        <Text style={[styles.title, textColor]}>Bien : {item.bienss}</Text>
+        <Text style={[styles.title, textColor]}>Téléphone :{item.telb}</Text>
+        <Text style={[styles.title, textColor]}>Date RDV : {item.datetime}</Text>
     </TouchableOpacity>
 );
 /******* Fin du FlatList */
 
 
-const ListUsers = ({ navigation }) => {
+const ListRDV = ({ navigation }) => {
     const [selectedId, setSelectedId] = useState(null);
-    const [users, setUsers] = useState([]);
+    const [rdvs, setRdvs] = useState([]);
     const [fetchedState, setFetchedState] = useState(null);
 
     useEffect(
@@ -32,13 +28,12 @@ const ListUsers = ({ navigation }) => {
         }, []
     );
     const getData = async () => {
-        const response = await fetch('https://jsonplaceholder.typicode.com/users')
-        //const response = await fetch('http://127.0.0.1:8000/api/pharma/users')
-        const data = await response.json()
-        setUsers(data)
-        setFetchedState(null);
+        const response = await fetch('http://127.0.0.1:8000/routes/api/rendezvouses.json')
+        const data = await response.json();
         //console.log(data)
-    }
+        setRdvs(data)
+        setFetchedState(null);
+
     /////
     const renderItem = ({ item }) => {
         const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
@@ -50,7 +45,8 @@ const ListUsers = ({ navigation }) => {
                 onPress={() => {
                     setSelectedId(item.id)
                     //console.log(item.id)
-                    navigation.navigate('DetailsUser', { userId: item.id })
+                    //navigation.navigate('DetailsUser', { userId: item.id })
+                    navigation.navigate('DetailsRDV', { rdvId: item.id })
                 }
                 }
                 backgroundColor={{ backgroundColor }}
@@ -61,18 +57,19 @@ const ListUsers = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Button title="AddUser" onPress={()=>navigation.navigate('AddUser')}></Button>
-            <Text style={styles.titreText}>Liste des Users</Text>
+            <Button title="Ajouter un rendez-vous" onPress={()=>navigation.navigate('AddUser')}></Button> 
+            <Text style={styles.titreText}>Liste des Rendez-vous</Text>
             {
                 fetchedState ? <ActivityIndicator size="large" color="#0000ff" /> :
                     <FlatList
-                        data={users}
+                        data={rdvs}
                         renderItem={renderItem}
                     />
-            }
+    }
         </SafeAreaView>
     );
 
 }
+}
 
-export default ListUsers;
+export default ListRDV;

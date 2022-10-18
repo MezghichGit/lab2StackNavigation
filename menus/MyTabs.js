@@ -1,10 +1,11 @@
 /*****Partie Stack  ********/
 import StackUser from './StackUser';
 import  StackContact from './StackContact';
-
+import StackRDV from './StackRDV';
 import HomeScreen from '../components/HomeScreen';
 import SettingsScreen from '../components/SettingsScreen';
 import LocationScreen from  '../components/LocationScreen';
+
 
 import Geolocation from 'react-native-geolocation-service';
 
@@ -25,11 +26,12 @@ const MyTabs = () => {
                     else if (route.name == "Settings") { iconName = "settings-outline"; }
                     else if (route.name == "Users") { iconName = "people-circle"; }
                     else if (route.name == "Location") { iconName = "location"; }
+                    else if (route.name == "RDV") { iconName = "alarm"; }
                     else { iconName = "mail"; }
                     return (
                         <Ionicons
                             name={iconName}
-                            color={'red'}
+                            color={'blue'}
                             size={18}
                         />
                     );
@@ -37,6 +39,7 @@ const MyTabs = () => {
             })}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="RDV" component={StackRDV} />
             <Tab.Screen name="Users" component={StackUser} />
             <Tab.Screen name="Settings" component={SettingsScreen} />
             <Tab.Screen name="Location" component={LocationScreen} />
